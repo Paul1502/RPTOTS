@@ -24,16 +24,14 @@ if not exist .git (
 ) else (
     echo Git-Repository gefunden. Prüfe auf Updates...
     git fetch origin
-    git status
-    git status | find "Your branch is up to date" >nul
-    if %errorlevel% neq 0 (
-        echo Es gibt Updates. Ziehe die neuesten Änderungen...
-        git reset --hard origin/main  :: Erzwinge eine Synchronisierung mit der Remote-Branch
-        git pull origin main
-        echo Das Projekt wurde erfolgreich aktualisiert!
-    ) else (
-        echo Dein Projekt ist bereits auf dem neuesten Stand.
-    )
+
+    :: Verwerfe alle lokalen Änderungen (auch gelöschte und ungetrackte Dateien)
+    git reset --hard origin/main
+    git clean -f -d
+
+    echo Ziehe die neuesten Änderungen von GitHub...
+    git pull origin main
+    echo Das Projekt wurde erfolgreich aktualisiert!
 )
 
 pause
