@@ -25,7 +25,7 @@ if not exist .git (
     echo Git-Repository gefunden. Prüfe auf Updates...
     git fetch origin
 
-    :: Verwerfe alle lokalen Änderungen (auch gelöschte und ungetrackte Dateien)
+    :: Verwerfe alle lokalen Änderungen (auch gelöschte und ungetrackte Dateien) und erzwinge den Reset
     git reset --hard origin/main
     git clean -f -d
 
