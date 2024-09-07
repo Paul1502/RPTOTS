@@ -14,17 +14,24 @@ echo Überprüfe auf Updates von GitHub...
 :: Wechsle in das Verzeichnis, in dem die .bat-Datei liegt (aktuelles Verzeichnis)
 cd /d "%~dp0"
 
-:: Hole die neuesten Änderungen von GitHub
-git fetch origin
-
-:: Überprüfen, ob es Updates gibt
-git status | find "Your branch is up to date" >nul
-if %errorlevel% neq 0 (
-    echo Es gibt Updates. Ziehe die neuesten Änderungen...
+:: Überprüfe, ob das Verzeichnis ein Git-Repository ist
+if not exist .git (
+    echo Dieses Verzeichnis ist kein Git-Repository. Initialisiere das Git-Repository...
+    git init
+    git remote add origin https://github.com/Paul1502/RPTOTS.git
     git pull origin main
-    echo Das Projekt wurde erfolgreich aktualisiert!
+    echo Das Git-Repository wurde initialisiert und die neuesten Updates wurden heruntergeladen.
 ) else (
-    echo Dein Projekt ist bereits auf dem neuesten Stand.
+    echo Git-Repository gefunden. Prüfe auf Updates...
+    git fetch origin
+    git status | find "Your branch is up to date" >nul
+    if %errorlevel% neq 0 (
+        echo Es gibt Updates. Ziehe die neuesten Änderungen...
+        git pull origin main
+        echo Das Projekt wurde erfolgreich aktualisiert!
+    ) else (
+        echo Dein Projekt ist bereits auf dem neuesten Stand.
+    )
 )
 
 pause
